@@ -2,6 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { IUser } from 'src/users/users.interface';
+import { RegisterUserDto } from 'src/users/dto/create-user.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { User, UserDocument } from 'src/users/schemas/user.schema';
+import { SoftDeleteModel } from 'soft-delete-plugin-mongoose/dist/src/soft-delete-model';
 
 @Injectable()
 export class AuthService {
@@ -37,6 +41,24 @@ export class AuthService {
             name,
             email,
             role
+        };
+    }
+
+    async register(registerUserDto: RegisterUserDto) {
+        // const hashPassword = this.usersService.getHashPassword(registerUserDto.password);
+        // const user = await this.userModel.create({
+        //     name: registerUserDto.name,
+        //     email: registerUserDto.email,
+        //     password: hashPassword,
+        //     age: registerUserDto.age,
+        //     gender: registerUserDto.gender,
+        //     address: registerUserDto.address,
+        //     role: "USER"
+        // })
+        const newUser = await this.usersService.register(registerUserDto);
+        return {
+            _id: newUser?._id,
+            createdAt: newUser?.createdAt,
         };
     }
 }
