@@ -8,6 +8,9 @@ class Company {
 
     @IsNotEmpty()
     name: string;
+
+    @IsNotEmpty()
+    logo: string;
 }
 
 export class CreateJobDto {
@@ -24,6 +27,13 @@ export class CreateJobDto {
     @ValidateNested()
     @Type(() => Company)
     company: Company;
+
+    @IsNotEmpty({ message: "isActive không được để trống", })
+    isActive: boolean;
+
+    @IsNotEmpty({ message: "Location không được để trống", })
+    location: number;
+
 
     @IsNotEmpty({ message: "Salary không được để trống", })
     salary: number;
