@@ -14,10 +14,17 @@ import { PermissionsModule } from './permissions/permissions.module';
 import { RolesModule } from './roles/roles.module';
 import { DatabasesModule } from './databases/databases.module';
 import { SubscribersModule } from './subscribers/subscribers.module';
+import { MailModule } from './mail/mail.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
   imports: [
-    // MongooseModule.forRoot('mongodb+srv://tathan:zt4g9RbEeiPSJbGm@cluster0.zc1wqzm.mongodb.net/'),
+    ThrottlerModule.forRoot({
+      ttl: 60,
+      limit: 3,
+    }),
+    ScheduleModule.forRoot(),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
@@ -41,7 +48,8 @@ import { SubscribersModule } from './subscribers/subscribers.module';
     PermissionsModule,
     RolesModule,
     DatabasesModule,
-    SubscribersModule],
+    SubscribersModule,
+    MailModule],
   controllers: [AppController],
   providers: [AppService],
 })

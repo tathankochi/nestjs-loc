@@ -85,7 +85,8 @@ export class SubscribersService {
           _id: user._id,
           email: user.email
         }
-      }
+      },
+      { upsert: true }
     );
     return updated;
   }
@@ -106,5 +107,9 @@ export class SubscribersService {
     return this.subscriberModel.softDelete({
       _id: id
     })
+  }
+  async getSkills(user: IUser) {
+    const { email } = user;
+    return await this.subscriberModel.findOne({ email }, { skills: 1 });
   }
 }
